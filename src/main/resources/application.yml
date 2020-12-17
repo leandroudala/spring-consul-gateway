@@ -6,7 +6,7 @@ spring:
     name: gateway-service
   cloud:
     consul:
-      host: 192.168.15.122
+      host: 192.168.15.207
       port: 8500
     gateway:
       routes:
@@ -16,8 +16,9 @@ spring:
         - Path=/users/**
         filters:
           - RewritePath=/users/?(?<path>.*), /$\{path}
-      - id: consumerModule
-        uri: http://localhost:8082/
+      - id: auth-service
+        uri: lb://auth-service
         predicates:
-        - Path=/consumer/**
-        
+        - Path=/auth/**
+        filters:
+          - RewritePath=/auth/?(?<path>.*), /$\{path}
